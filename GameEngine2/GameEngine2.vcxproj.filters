@@ -46,6 +46,12 @@
     <MeshContentTask Include="Assets\SphereNode.FBX">
       <Filter>Assets\CMO</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="Assets\ball.FBX">
+      <Filter>Assets\CMO</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\box.FBX">
+      <Filter>Assets\CMO</Filter>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <None Include="Particle.hlsli" />

@@ -29,11 +29,6 @@ private:
 	// 天球
 	std::unique_ptr<MyLibrary::Obj3D> m_ObjSkydome;
 	std::unique_ptr<MyLibrary::Obj3D> m_ObjTest;
-	// パーティクル表示テスト
-	std::unique_ptr<ParticleTest> m_ParticleTest;
-	
-	std::unique_ptr<MyLibrary::Sprite> m_Spr;
-	std::unique_ptr<MyLibrary::Sprite> m_Spr2;
 
-	std::unique_ptr<MyLibrary::Sprite> m_Spr3;
+	std::unique_ptr<MyLibrary::Obj3D> m_ball;
 };
