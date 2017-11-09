@@ -239,6 +239,7 @@
     <None Include="Particle.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <MeshContentTask Include="..\..\..\何かに使えそうな簡易3Dモデル\ball2.FBX" />
     <MeshContentTask Include="Assets\ball.FBX" />
     <MeshContentTask Include="Assets\box.FBX" />
     <MeshContentTask Include="Assets\CapsuleNode.FBX" />

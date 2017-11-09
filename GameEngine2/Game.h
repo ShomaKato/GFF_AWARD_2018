@@ -30,5 +30,6 @@ private:
 	std::unique_ptr<MyLibrary::Obj3D> m_ObjSkydome;
 	std::unique_ptr<MyLibrary::Obj3D> m_ObjTest;
 
+	//* テスト用モデル
 	std::unique_ptr<MyLibrary::Obj3D> m_ball;
 };

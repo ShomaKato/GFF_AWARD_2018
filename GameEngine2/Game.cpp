@@ -42,9 +42,13 @@ void Game::Initialize()
 	m_ObjSkydome = std::make_unique<Obj3D>();
 	m_ObjSkydome->LoadModel(L"skydome");
 
-	m_ObjTest = std::make_unique<Obj3D>();
-	m_ObjTest->LoadModel(L"SphereNode");
-	m_ObjSkydome->AddChild(m_ObjTest.get());
+	//m_ObjTest = std::make_unique<Obj3D>();
+	//m_ObjTest->LoadModel(L"SphereNode");
+	//m_ObjSkydome->AddChild(m_ObjTest.get());
+
+	//* ボール読み込み
+	m_ball = std::make_unique<Obj3D>();
+	m_ball->LoadModel(L"ball2");
 
 
 	ADX2Le::GetInstance()->Initialize(L"ADX2_samples.acf");
@@ -82,6 +86,9 @@ void Game::Update(StepTimer const& timer)
 void Game::Render()
 {
 	m_ObjSkydome->Draw();
+
+	//*
+	m_ball->Draw();
 
 }
 #pragma endregion

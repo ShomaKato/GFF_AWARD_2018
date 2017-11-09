@@ -52,6 +52,9 @@
     <MeshContentTask Include="Assets\box.FBX">
       <Filter>Assets\CMO</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="..\..\..\何かに使えそうな簡易3Dモデル\ball2.FBX">
+      <Filter>Assets\CMO</Filter>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <None Include="Particle.hlsli" />
