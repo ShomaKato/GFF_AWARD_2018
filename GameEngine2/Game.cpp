@@ -8,6 +8,7 @@
 extern void ExitGame();
 
 using namespace DirectX;
+using namespace DirectX::SimpleMath;
 using Microsoft::WRL::ComPtr;
 using namespace MyLibrary;
 
@@ -46,9 +47,15 @@ void Game::Initialize()
 	//m_ObjTest->LoadModel(L"SphereNode");
 	//m_ObjSkydome->AddChild(m_ObjTest.get());
 
+
+	//* プレイヤの初期化 ---------------------------------------------------
+
 	//* ボール読み込み
 	m_ball = std::make_unique<Obj3D>();
 	m_ball->LoadModel(L"ball2");
+
+
+	//* --------------------------------------------------------------------
 
 
 	ADX2Le::GetInstance()->Initialize(L"ADX2_samples.acf");
@@ -70,6 +77,43 @@ void Game::Update(StepTimer const& timer)
 	MouseUtil::GetInstance()->Update();
 	ADX2Le::GetInstance()->Update();
 
+	//* プレイヤの動作 ---------------------------------------------------
+
+	//* キーボード情報を毎フレーム更新する
+	KeyboardUtil::GetInstance()->Update();
+
+	//* 今いる場所に、現在座標を更新
+	m_pos = m_ball->GetTrans();
+
+	//* Aキーが押されたら
+	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::A))
+	{
+		m_pos.x = m_pos.x - 0.3f;
+	}
+	//* Dキーが押されたら
+	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::D))
+	{
+		m_pos.x = m_pos.x + 0.3f;
+	}
+	//* Wキーが押されたら
+	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::W))
+	{
+		m_pos.y = m_pos.y + 0.3f;
+	}
+	//* Sキーが押されたら
+	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::S))
+	{
+		m_pos.y = m_pos.y - 0.3f;
+	}
+
+	//* 移動後の座標を現在座標に設定
+	m_ball->SetTrans(m_pos);
+
+	//* ------------------------------------------------------------------	
+
+
+	
+
 	m_Camera->Update();
 
 	if (MouseUtil::GetInstance()->IsTriggered(MyLibrary::MouseUtil::Button::Left))
@@ -87,8 +131,7 @@ void Game::Render()
 {
 	m_ObjSkydome->Draw();
 
-	//*
+	//* ボールの描画
 	m_ball->Draw();
 
 }
-#pragma endregion
