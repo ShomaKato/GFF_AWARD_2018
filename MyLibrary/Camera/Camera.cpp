@@ -12,8 +12,8 @@ using namespace MyLibrary;
 Camera::Camera(int width, int height)
 {
 	m_View = Matrix::Identity;
-	m_Eyepos = Vector3(0.0f, 6.0f, 10.0f);
-	m_Refpos = Vector3(0.0f, 2.0f, 0.0f);
+	m_Eyepos = Vector3(0.0f, 0.0f, 10.0f);
+	m_Refpos = Vector3(0.0f, 0.0f, 0.0f);
 	m_Upvec = Vector3(0.0f, 1.0f, 0.0f);
 
 	m_Proj = Matrix::Identity;

@@ -32,9 +32,6 @@ void Game::Initialize()
 
 	//* カメラの初期化-----------------------------------------------------------
 	m_camera = std::make_unique<Camera>(windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
-	m_eyepos = Vector3(0, 0, 0);
-	m_refpos = Vector3(0, 0, 0);
-	m_upvec = Vector3(0, 0, 0); *
 	//* -------------------------------------------------------------------------
 
 	{ // Obj3D初期化
@@ -129,7 +126,7 @@ void Game::Update(StepTimer const& timer)
 
 
 
-	m_debugCamera->Update();
+	//m_debugCamera->Update();
 
 	//* カメラの更新-----------------------------------------------------------
 	m_camera->Update();

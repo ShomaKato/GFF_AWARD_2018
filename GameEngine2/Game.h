@@ -44,8 +44,6 @@ private:
 
 	//* カメラ-----------------------------------------------------------
 	std::unique_ptr<MyLibrary::Camera> m_camera;
-	// ビュー行列
-	DirectX::SimpleMath::Matrix m_view;
 	// カメラ座標
 	DirectX::SimpleMath::Vector3 m_eyepos;
 	// ターゲット座標
@@ -53,6 +51,8 @@ private:
 	// 上方向ベクトル
 	DirectX::SimpleMath::Vector3 m_upvec;
 
+	// ビュー行列
+	DirectX::SimpleMath::Matrix m_view;
 	// プロジェクション行列
 	DirectX::SimpleMath::Matrix m_proj;
 	// 縦方向視野角
