@@ -13,12 +13,14 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="ParticleTest.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Obstacle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ParticleTest.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -55,6 +57,9 @@
       <Filter>Assets\CMO</Filter>
     </MeshContentTask>
     <MeshContentTask Include="..\..\..\何かに使えそうな簡易3Dモデル\ball2.FBX">
+      <Filter>Assets\CMO</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\box2.FBX">
       <Filter>Assets\CMO</Filter>
     </MeshContentTask>
   </ItemGroup>

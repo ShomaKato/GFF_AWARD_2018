@@ -183,12 +183,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ParticleTest.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ParticleTest.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
@@ -244,6 +246,7 @@
     <MeshContentTask Include="..\..\..\何かに使えそうな簡易3Dモデル\ball2.FBX" />
     <MeshContentTask Include="Assets\ball.FBX" />
     <MeshContentTask Include="Assets\box.FBX" />
+    <MeshContentTask Include="Assets\box2.FBX" />
     <MeshContentTask Include="Assets\CapsuleNode.FBX" />
     <MeshContentTask Include="Assets\skydome.FBX" />
     <MeshContentTask Include="Assets\SphereNode.FBX" />

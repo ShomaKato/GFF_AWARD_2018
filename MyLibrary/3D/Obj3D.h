@@ -11,6 +11,7 @@
 #include "..\Camera\Camera.h"
 #include <map>
 
+
 namespace MyLibrary
 {
 	// 3Dオブジェクト
@@ -66,7 +67,7 @@ namespace MyLibrary
 		//getter
 		static Camera* GetCamera() { return s_Common.camera; }
 
-	private:
+	protected:
 		// 静的メンバ変数（全オブジェクトで共有）
 		static Common s_Common;
 
@@ -113,7 +114,14 @@ namespace MyLibrary
 		const DirectX::SimpleMath::Vector3& GetScale() { return m_Scale; }
 		const DirectX::SimpleMath::Matrix& GetLocalWorld() { return m_LocalWorld; }
 
-	private:
+
+
+		////* 移動関数
+		//void Move();
+		////* 当たり判定の取得関数
+		//const MyLibrary::CapsuleNode GetCollision() { return m_collision; }
+
+	protected:
 		// モデルデータへのポインタ
 		const DirectX::Model* m_pModel;
 		// 平行移動
@@ -137,5 +145,13 @@ namespace MyLibrary
 		std::vector<Obj3D*>	m_Children;
 		// 行列ダーティフラグ
 		bool m_IsDirty;
+
+
+
+		////* 当たり判定（カプセル状）
+		//MyLibrary::CapsuleNode m_collision;
+
 	};
 }
+
+

@@ -98,5 +98,7 @@ namespace MyLibrary
 		float m_LocalRadius;
 		// 親行列からのオフセット座標
 		DirectX::SimpleMath::Vector3 m_Trans;
+
+
 	};
 }

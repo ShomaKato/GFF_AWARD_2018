@@ -7,6 +7,8 @@
 #include <d3d11_1.h>
 #include <memory>
 
+////*
+//#include "..\MyLibrary\Collision\CollisionNode.h"
 #include "Game.h"
 
 // Indicates to hybrid graphics systems to prefer the discrete part by default
@@ -56,6 +58,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	framework.reset();
 
     CoUninitialize();
+
+	////*
+	//MyLibrary::CollisionNode::SetDebugVisible(true);
 
     return (int) msg.wParam;
 }

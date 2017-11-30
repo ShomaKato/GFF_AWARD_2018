@@ -4,7 +4,7 @@
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
-using namespace MyLibrary;
+using namespace MyLibrary; 
 
 // 定数
 // リソースディレクトリパス
@@ -41,6 +41,7 @@ void Obj3D::InitializeCommon(CommonDef def)
 	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_REV_SUBTRACT;
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 	HRESULT ret = def.pDevice->CreateBlendState(&desc, s_Common.blendStateSubtract.GetAddressOf());
+
 }
 
 void Obj3D::UnloadAll()
@@ -67,6 +68,13 @@ Obj3D::Obj3D()
 	m_Scale = Vector3(1, 1, 1);
 
 	m_RotEuler = Vector3(0, 0, 0);
+
+
+
+	////* 当たり判定の初期化処理
+	//m_collision.Initialize();
+	//m_collision.SetDebugVisible(true);
+	//m_collision.SetLocalRadius(1.2f);
 }
 
 Obj3D::~Obj3D()
@@ -414,3 +422,6 @@ void Obj3D::DrawBillboardConstrainY(bool recursive)
 		}
 	}
 }
+
+
+
