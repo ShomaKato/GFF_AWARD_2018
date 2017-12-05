@@ -245,6 +245,7 @@
   <ItemGroup>
     <MeshContentTask Include="..\..\..\何かに使えそうな簡易3Dモデル\ball2.FBX" />
     <MeshContentTask Include="Assets\ball.FBX" />
+    <MeshContentTask Include="Assets\ball3.FBX" />
     <MeshContentTask Include="Assets\box.FBX" />
     <MeshContentTask Include="Assets\box2.FBX" />
     <MeshContentTask Include="Assets\CapsuleNode.FBX" />

@@ -18,17 +18,13 @@ void CollisionNode::SetParent(Obj3D* pParent)
 	m_Obj.SetParent(pParent);
 }
 
-SphereNode::SphereNode()
-{
-	// 初期値（半径1m）
-	m_LocalRadius = 1.0f;
-}
-
 void SphereNode::Initialize()
 {
 	// デバッグ表示用CMOモデルの読み込み
 	// モデルは半径1mで作成すること。
-	m_Obj.LoadModel(L"SphereNode");
+	m_Obj.LoadModel(L"SphereNode");	
+	// 初期値（半径1m）
+	m_LocalRadius = 1.0f;
 }
 
 void SphereNode::Update()
@@ -77,19 +73,16 @@ void SphereNode::Draw()
 }
 
 //--------------------------------------------------------------
-CapsuleNode::CapsuleNode()
-{
-	// 初期値（半径1m）
-	m_LocalRadius = 1.0f;
-	// 初期値（軸長さ3m）
-	m_LocalLength = 1.0f;
-}
 
 void CapsuleNode::Initialize()
 {
 	// デバッグ表示用モデルの読み込み
 	// モデルは半径1m、軸長さ1mの円柱で作成すること。
 	m_Obj.LoadModel(L"CapsuleNode");
+	// 初期値（半径1m）
+	m_LocalRadius = 1.0f;
+	// 初期値（軸長さ3m）
+	m_LocalLength = 1.0f;
 }
 
 void CapsuleNode::Update()

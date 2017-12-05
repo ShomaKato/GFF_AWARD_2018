@@ -1,9 +1,21 @@
+///-------------------------------------------------------------------
+//*
+//*	@作成日		2017/11/16
+//*
+//*	@名前		Player.h
+//*
+//*	@著者		加藤 彰馬
+//*
+//* @役割		Obj3Dクラスを継承し、移動機能を追記した自機クラスのヘッダー
+//*
+///----------------------------------------------------------------
+
 // 多重インクルードの防止
 #pragma once
 
 // ヘッダファイルのインクルード
-#include <DirectXMath.h>
-#include <DirectXColors.h>
+//#include <DirectXMath.h>
+//#include <DirectXColors.h>
 
 //#include "..\MyLibrary\3D\Obj3D.h"
 //#include "..\MyLibrary\Input\KeyboardUtil.h"
@@ -11,6 +23,10 @@
 
 #include "MyLibrary.h"
 
+
+//////////////////////
+//* プレイヤクラス *//
+//////////////////////
 class Player :
 	public MyLibrary::Obj3D
 {
@@ -25,13 +41,15 @@ public:
 	void UpdateCollision();
 	// 当たり判定の描画関数
 	void DrawCollision();
+	// 終了関数
+	void Finalization();
 	//// 当たり判定の取得
-	//SphereNode* GetCollision() { return m_collision; }
+	const MyLibrary::SphereNode& GetCollision() { return m_collision; }
 
-protected:
-	// 当たり判定（カプセル状）
+private:
+	// 当たり判定（球状）
 	//SphereNode m_collision;　NOTE:コリジョンノードはコンストラクタのあるクラスなので、まずそれを起動させないとダメ
 	//std::unique_ptr<MyLibrary::SphereNode> m_collision;
-	MyLibrary::SphereNode* m_collision;
+	MyLibrary::SphereNode m_collision;
 };
 

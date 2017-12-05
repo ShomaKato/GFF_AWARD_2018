@@ -27,18 +27,19 @@ void Game::Initialize()
 	// ウィンドウ矩形取得
 	RECT windowRect = deviceResources->GetOutputSize();
 
-	//// デバッグカメラ作成
-	m_debugCamera = std::make_unique<DebugCamera>(windowRect.right- windowRect.left, windowRect.bottom - windowRect.top);
 
-	//* カメラの初期化-----------------------------------------------------------
-	//m_camera = std::make_unique<Camera>(windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
+	//* カメラの初期化-----------------------------------------------------------	
+	// デバッグカメラ作成
+	//m_debugCamera = std::make_unique<DebugCamera>(windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
+
+	m_camera = std::make_unique<Camera>(windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
 	//* -------------------------------------------------------------------------
 
 	{ // Obj3D初期化
 		// 設定
 		Obj3D::CommonDef def;
-		def.pCamera = m_debugCamera.get();
-		//def.pCamera = m_camera.get();
+		//def.pCamera = m_debugCamera.get();
+		def.pCamera = m_camera.get();
 		def.pDevice = deviceResources->GetD3DDevice();
 		def.pDeviceContext = deviceResources->GetD3DDeviceContext();
 		// 設定を元に初期化
@@ -61,12 +62,42 @@ void Game::Initialize()
 
 	//* --------------------------------------------------------------------
 
-	//* 仮障害物の初期化 ---------------------------------------------------
+	//* 壁の初期化 ---------------------------------------------------
 
-	//* ボックス読み込み
-	m_obstacle = std::make_unique<Obstacle>();
-	m_obstacle->SetTrans(Vector3(0, 0, -5));
-	m_obstacle->SetRot(Vector3(0, XMConvertToRadians(90), 0));
+	//* 最初は0の壁が手前
+	m_whichWall = 0;
+	//* どれくらい進んだら次の壁が作られるか
+	m_wallInterval = -100.0f;
+
+	//* 左の壁の読み込み
+	m_leftWall[0] = std::make_unique<Obstacle>();
+	m_leftWall[0]->SetTrans(Vector3(-7.5f, -10.0f, 0.0f));
+	m_leftWall[0]->SetScale(Vector3(1.0f, 20.0f, 20.0f));
+	m_leftWall[1] = std::make_unique<Obstacle>();
+	m_leftWall[1]->SetTrans(Vector3(-7.5f, -10.0f, -100.0f));
+	m_leftWall[1]->SetScale(Vector3(1.0f, 20.0f, 20.0f));
+
+	//* 右の壁の読み込み
+	m_rightWall[0] = std::make_unique<Obstacle>();
+	m_rightWall[0]->SetTrans(Vector3(7.5f, -10.0f, 0.0f));
+	m_rightWall[0]->SetScale(Vector3(1.0f, 20.0f, 20.0f));
+	m_rightWall[1] = std::make_unique<Obstacle>();
+	m_rightWall[1]->SetTrans(Vector3(7.5f, -10.0f, -100.0f));
+	m_rightWall[1]->SetScale(Vector3(1.0f, 20.0f, 20.0f));
+	//* 天井の読み込み
+	m_roofWall[0] = std::make_unique<Obstacle>();
+	m_roofWall[0]->SetTrans(Vector3(0.0f, 4.4f, 0));
+	m_roofWall[0]->SetScale(Vector3(20.0f, 1.0f, 20.0f));
+	m_roofWall[1] = std::make_unique<Obstacle>();
+	m_roofWall[1]->SetTrans(Vector3(0.0f, 4.4f, -100));
+	m_roofWall[1]->SetScale(Vector3(20.0f, 1.0f, 20.0f));
+	//* yukの読み込み
+	m_floorWall[0] = std::make_unique<Obstacle>();
+	m_floorWall[0]->SetTrans(Vector3(0.0f, -5.4f, 0.0f));
+	m_floorWall[0]->SetScale(Vector3(20.0f, 1.0f, 20.0f));
+	m_floorWall[1] = std::make_unique<Obstacle>();
+	m_floorWall[1]->SetTrans(Vector3(0.0f, -5.4f, -100.0f));
+	m_floorWall[1]->SetScale(Vector3(20.0f, 1.0f, 20.0f));
 
 	//* --------------------------------------------------------------------
 
@@ -87,30 +118,67 @@ void Game::Finalize()
 /// <param name="timer">時間情報</param>
 void Game::Update(StepTimer const& timer)
 {
-	MouseUtil::GetInstance()->Update();
-	ADX2Le::GetInstance()->Update();
-
+	//MouseUtil::GetInstance()->Update();
+	//ADX2Le::GetInstance()->Update();
 
 	//* キーボード情報を毎フレーム更新する
 	KeyboardUtil::GetInstance()->Update();
 
-	//* プレイヤの移動関数
-	m_player->Move();
+	//* 進んだ記録を左上に表示
+	int distance = m_player->GetTrans().z;
+	m_DebugText->AddText(Vector2(0, 0), L"Record:%dm", -distance);
+
+	//* 壁のコリジョン判定を考える時間がなさそうなので、領域で判定
+	if (m_player->GetTrans().x < 6.0f && 
+		m_player->GetTrans().x > -6.0f &&
+		m_player->GetTrans().y < 3.5f &&
+		m_player->GetTrans().y > -3.5f)
+	{//* 領域の外に出ていないならば
+		//* プレイヤの更新処理
+		m_player->Move();
+		//* カメラの更新処理
+		m_camera->Update();
+	}
+	else
+	{
+		// ゲームオーバーになったら記録とタイトルへ促す文章を表示
+		m_DebugText->AddText(Vector2(0, 50), L"Your record is %d m!\nPress SPACE to title.", -distance);
+	}
+
 	m_player->Update();
 	m_player->UpdateCollision();
 
+	////* プレイヤの更新処理
+	//m_player->Move();
+
+	//if (m_player->GetTrans().x > 5)
+	//{
+	//	m_player->Finalization();
+	//}
+
+	//m_player->Update();
+	//m_player->UpdateCollision();
 
 
 
 
-
-	m_debugCamera->Update();
-
-	//* カメラの更新-----------------------------------------------------------
-	//m_camera->Update();
-	//* -----------------------------------------------------------------------
+	//m_debugCamera->Update();
 
 
+	//* 壁の更新
+	//* プレイヤが一定距離進んだら、手前の壁が奥に移動して次の壁になる
+	if (distance <= m_wallInterval)
+	{
+		m_wallInterval -= 100.0f;
+		m_leftWall[m_whichWall]->SetTrans(Vector3(-7.5f, -10.0f, m_wallInterval));
+		m_rightWall[m_whichWall]->SetTrans(Vector3(7.5f, -10.0f, m_wallInterval));
+		m_roofWall[m_whichWall]->SetTrans(Vector3(0.0f, 4.4f, m_wallInterval));
+		m_floorWall[m_whichWall]->SetTrans(Vector3(0.0f, -5.4f, m_wallInterval));
+		m_whichWall = !m_whichWall;
+	}
+
+
+	
 
 
 
@@ -127,51 +195,24 @@ void Game::Update(StepTimer const& timer)
 /// </summary>
 void Game::Render()
 {
-	m_ObjSkydome->Draw();
+	//m_ObjSkydome->Draw();
 
-	//* ボールの描画
+	//* プレイヤの描画
 	m_player->Draw();
 	m_player->DrawCollision();
 
-	//* ボックスの描画
-	m_obstacle->Draw();
+	//* 壁の描画
+	m_leftWall[0]->Draw();
+	m_leftWall[1]->Draw();
+	m_rightWall[0]->Draw();
+	m_rightWall[1]->Draw();
+	m_roofWall[0]->Draw();
+	m_roofWall[1]->Draw();
+	m_floorWall[0]->Draw();
+	m_floorWall[1]->Draw();
 }
 
 
-
-//
-//
-////* テスト用プレイヤ関数-------------------------------------------------
-//void Game::Move()
-//{
-//	//* 今いる場所に、現在座標を更新
-//	m_pos = m_ball->GetTrans();
-//
-//	//* 常に前に向かって進み続ける
-//	m_pos.z = m_pos.z - 0.1f;
-//
-//	//* Aキーが押されたら
-//	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::A))
-//	{
-//		m_pos.x = m_pos.x - 0.3f;
-//	}
-//	//* Dキーが押されたら
-//	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::D))
-//	{
-//		m_pos.x = m_pos.x + 0.3f;
-//	}
-//	//* Wキーが押されたら
-//	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::W))
-//	{
-//		m_pos.y = m_pos.y + 0.3f;
-//	}
-//	//* Sキーが押されたら
-//	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::S))
-//	{
-//		m_pos.y = m_pos.y - 0.3f;
-//	}
-//
-//	//* 移動後の座標を現在座標に設定
-//	m_ball->SetTrans(m_pos);
-//}
-////* ---------------------------------------------------------------------
+void Game::EndGame()
+{
+}

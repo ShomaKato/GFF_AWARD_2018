@@ -51,8 +51,6 @@ namespace MyLibrary
 	class SphereNode : public CollisionNode, public Sphere
 	{
 	public:
-		// コンストラクタ
-		SphereNode();
 		// 初期化
 		void Initialize();
 		// 描画
@@ -74,8 +72,6 @@ namespace MyLibrary
 	class CapsuleNode : public CollisionNode, public Capsule
 	{
 	public:
-		// コンストラクタ
-		CapsuleNode();
 		// 初期化
 		void Initialize();
 		// 描画
