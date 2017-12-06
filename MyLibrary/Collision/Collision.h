@@ -165,3 +165,4 @@ namespace MyLibrary
 	bool CheckCapsule2Capsule(const Capsule& _capsule0, const Capsule& _capsule1, DirectX::SimpleMath::Vector3* _inter = nullptr);
 	bool CheckSphere2Capsule(const Sphere& _sphere, const Capsule& _capsule, DirectX::SimpleMath::Vector3* _inter = nullptr);
 }
+

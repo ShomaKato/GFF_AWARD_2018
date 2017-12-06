@@ -32,20 +32,30 @@ using namespace DirectX::SimpleMath;
 ////!
 ////! @戻り値：存在しない
 ////----------------------------------------------------------------------
-Player::Player()
+Player::Player(bool isPlayer)
+	:m_isOver(0)
 {
-	// モデルの読み込み
-	LoadModel(L"ball2");
-
 	// 当たり判定の設定
 	//m_collision = std::make_unique<SphereNode>();
 	m_collision.Initialize();
 	m_collision.SetDebugVisible(false);
-	//m_collision.SetLocalRadius(.2f);
 	//m_collision.SetLength(0.1f);
 	m_collision.SetTrans(GetTrans());
 	//m_collision.SetRot(Vector3(0, 0, 0));
 
+	// 引数によって、プレイヤモデルか障害物モデルか切り替える
+	if (isPlayer)
+	{
+		// プレイヤモデルの読み込み
+		LoadModel(L"ball2");
+		m_collision.SetLocalRadius(0.9f);
+	}
+	else
+	{
+		// 障害物モデルの読み込み
+		LoadModel(L"ball3");
+		m_collision.SetLocalRadius(1.45f);
+	}
 }
 
 
@@ -79,27 +89,27 @@ void Player::Move()
 	m_Trans = GetTrans();
 
 	//* 常に前に向かって進み続ける
-	m_Trans.z = m_Trans.z - 0.1f;
+	m_Trans.z = m_Trans.z - 0.2f;
 
 	//* Aキーが押されたら
 	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::A))
 	{
-		m_Trans.x = m_Trans.x - 0.3f;
+		m_Trans.x = m_Trans.x - 0.2f;
 	}
 	//* Dキーが押されたら
 	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::D))
 	{
-		m_Trans.x = m_Trans.x + 0.3f;
+		m_Trans.x = m_Trans.x + 0.2f;
 	}
 	//* Wキーが押されたら
 	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::W))
 	{
-		m_Trans.y = m_Trans.y + 0.3f;
+		m_Trans.y = m_Trans.y + 0.2f;
 	}
 	//* Sキーが押されたら
 	if (KeyboardUtil::GetInstance()->IsPressed(Keyboard::Keys::S))
 	{
-		m_Trans.y = m_Trans.y - 0.3f;
+		m_Trans.y = m_Trans.y - 0.2f;
 	}
 
 	//* 移動後の座標を現在座標に設定
@@ -118,15 +128,15 @@ void Player::Move()
 ////----------------------------------------------------------------------
 void Player::UpdateCollision()
 {
-	// 当たり判定の更新
-	m_collision.SetTrans(GetTrans());
-	m_collision.Update();
-
 	// スペースキーが押されたら可視化フラグのオンオフ
 	if (KeyboardUtil::GetInstance()->IsTriggered(Keyboard::Keys::Space))
 	{
 		m_collision.SetDebugVisible(!m_collision.GetDebugVisible());
 	}
+	// 当たり判定の更新
+	m_collision.SetTrans(GetTrans());
+	m_collision.Update();
+
 }
 
 
@@ -159,7 +169,26 @@ void Player::DrawCollision()
 ////!
 ////! @戻り値：なし(void)
 ////----------------------------------------------------------------------
+bool Player::isEnded()
+{
+	if (m_isOver)
+	{
+		return true;
+	}
+	return false;
+}
+
+
+////----------------------------------------------------------------------
+////! @関数名：Finalization
+////!
+////! @役割：プレイヤクラスのインスタンスを消去する関数
+////!
+////! @引数：なし(void)
+////!
+////! @戻り値：なし(void)
+////----------------------------------------------------------------------
 void Player::Finalization()
 {
-	
+	m_isOver = 1;
 }

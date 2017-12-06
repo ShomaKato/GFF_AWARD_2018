@@ -31,7 +31,7 @@ class Player :
 	public MyLibrary::Obj3D
 {
 public:
-	Player();
+	Player(bool isPlayer);
 	~Player();
 
 	// 移動関数
@@ -43,7 +43,9 @@ public:
 	void DrawCollision();
 	// 終了関数
 	void Finalization();
-	//// 当たり判定の取得
+	// 終了かどうかの判定関数
+	bool isEnded();
+	// 当たり判定の取得
 	const MyLibrary::SphereNode& GetCollision() { return m_collision; }
 
 private:
@@ -51,5 +53,8 @@ private:
 	//SphereNode m_collision;　NOTE:コリジョンノードはコンストラクタのあるクラスなので、まずそれを起動させないとダメ
 	//std::unique_ptr<MyLibrary::SphereNode> m_collision;
 	MyLibrary::SphereNode m_collision;
+
+	//* ゲームオーバー判定
+	bool m_isOver;
 };
 

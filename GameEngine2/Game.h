@@ -7,9 +7,10 @@
 #include <DirectXMath.h>
 #include <DirectXColors.h>
 //
-//#include "MyLibrary.h"
+#include "MyLibrary.h"
 #include "Player.h"
 #include "Obstacle.h"
+
 
 
 class Game : public MyLibrary::Framework
@@ -27,7 +28,7 @@ private:
     void Render();
 
 	//* ゲームオーバー関数
-	void EndGame();
+	bool StopGame();
 
 	// デバッグカメラ
 	std::unique_ptr<MyLibrary::DebugCamera> m_debugCamera;
@@ -43,9 +44,10 @@ private:
 	std::unique_ptr<Obstacle> m_rightWall[2];
 	std::unique_ptr<Obstacle> m_roofWall[2];
 	std::unique_ptr<Obstacle> m_floorWall[2];
-
 	//* 障害物
-	std::unique_ptr<Player> m_obstacle;
+	std::unique_ptr<Player> m_obstacle[8];
+
+
 	//* step1:奥行き3以内に二個以上存在しない
 	//* 訂正：奥行き3ごとに一個ずつ配置
 
@@ -64,12 +66,15 @@ private:
 	//* カメラ
 	std::unique_ptr<MyLibrary::Camera> m_camera;
 
-	//* 壁の判定用変数
-	bool m_whichWall;
-
 	//* どれくらい進んだら壁が新たに表示されるか
 	float m_wallInterval;
 
+	//* 壁の判定用変数
+	bool m_whichWall;
+
 	//* どれくらい進んだら障害物が新たに表示されるか
 	float m_obstacleInterval;
+
+	//* 障害物の判定用変数
+	int m_whichObstacle;
 };

@@ -35,9 +35,9 @@ Camera::~Camera()
 */
 void Camera::Update()
 {
-	//* プレイヤに合わせて前に進む
-	m_Eyepos.z = m_Eyepos.z - 0.1f;
-	m_Refpos.z = m_Refpos.z - 0.1f;
+	////* プレイヤに合わせて前に進む
+	m_Eyepos.z = m_Eyepos.z - 0.2f;
+	m_Refpos.z = m_Refpos.z - 0.2f;
 	// ビュー行列を計算
 	m_View = Matrix::CreateLookAt(m_Eyepos, m_Refpos, m_Upvec);
 	// プロジェクション行列を計算

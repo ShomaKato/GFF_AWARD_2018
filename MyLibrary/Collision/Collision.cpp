@@ -8,7 +8,7 @@
 //----------------------------------------------
 //	include
 //----------------------------------------------
-#include	"Collision.h"
+#include	"../Collision/Collision.h"
 
 // ネームスペースの省略指定
 using namespace DirectX::SimpleMath;
@@ -440,7 +440,7 @@ void ClosestPtSegment2Segment(const Segment& _segment0, const Segment& _segment1
 // 戻り値 : なし
 // メ　モ : 反時計回り順に３点指定する
 //--------------------------------------------------------------------------------------------
-void ComputeTriangle(const Vector3& _p0, const Vector3& _p1, const Vector3& _p2, Triangle* _triangle)
+void MyLibrary::ComputeTriangle(const Vector3& _p0, const Vector3& _p1, const Vector3& _p2, Triangle* _triangle)
 {
 	_triangle->P0 = _p0;
 	_triangle->P1 = _p1;
@@ -705,7 +705,7 @@ float DistanceSQ3D(const Vector3& p1, const Vector3& p2)
 }
 
 // 球と球の当たり判定
-bool CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, Vector3* inter)
+bool MyLibrary::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, Vector3* inter)
 {
 	// 中心間の距離を計算する
 	//float d = Vector3::Distance(_sphere0.center, _sphere1.center);
@@ -784,7 +784,7 @@ bool CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, Vector3* i
 // 戻り値 : 交差しているか否か
 // メ　モ : 
 //--------------------------------------------------------------------------------------------
-bool CheckSphere2Capsule(const Sphere& _sphere, const Capsule& _capsule, Vector3* inter)
+bool MyLibrary::CheckSphere2Capsule(const Sphere& _sphere, const Capsule& _capsule, Vector3* inter)
 {
 	// 球の中心とカプセルの線分の距離（の二乗）を計算
 	float distance2 = GetSqDistancePoint2Segment( _sphere.center, _capsule.segment );
@@ -814,7 +814,7 @@ bool CheckSphere2Capsule(const Sphere& _sphere, const Capsule& _capsule, Vector3
 //// 戻り値 : 交差しているか否か
 //// メ　モ : 
 ////--------------------------------------------------------------------------------------------
-bool CheckCapsule2Capsule(const Capsule& _capsule0, const Capsule& _capsule1, Vector3* inter)
+bool MyLibrary::CheckCapsule2Capsule(const Capsule& _capsule0, const Capsule& _capsule1, Vector3* inter)
 {
 	// 球の中心とカプセルの線分の距離（の二乗）を計算
 	float distanceSQ = GetSqDistanceSegment2Segment( _capsule0.segment, _capsule1.segment );
@@ -897,7 +897,7 @@ bool CheckCapsule2Capsule(const Capsule& _capsule0, const Capsule& _capsule1, Ve
 // 戻り値 : 交差しているか否か
 // メ　モ : 裏面の当たりはとらない
 //--------------------------------------------------------------------------------------------
-bool CheckSegment2Triangle(const Segment& _segment, const Triangle& _triangle, Vector3 *_inter)
+bool MyLibrary::CheckSegment2Triangle(const Segment& _segment, const Triangle& _triangle, Vector3 *_inter)
 {
 	const float epsilon = -1.0e-5f;	// 誤差吸収用の微小な値
 	Vector3 	LayV;		// 線分の終点→始点
@@ -1003,7 +1003,7 @@ bool CheckPoint2Triangle(const Vector3& _point, const Triangle& _triangle)
 // 戻り値 : 交差しているか否か
 // メ　モ : 裏面の当たりはとらない
 //--------------------------------------------------------------------------------------------
-bool CheckSphere2Triangle(const Sphere& _sphere, const Triangle& _triangle, Vector3 *_inter)
+bool MyLibrary::CheckSphere2Triangle(const Sphere& _sphere, const Triangle& _triangle, Vector3 *_inter)
 {
 	Vector3 p;
 

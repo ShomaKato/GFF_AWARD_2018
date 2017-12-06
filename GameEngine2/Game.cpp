@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include "ParticleTest.h"
+#include<time.h>
 
 extern void ExitGame();
 
@@ -27,18 +28,16 @@ void Game::Initialize()
 	// ウィンドウ矩形取得
 	RECT windowRect = deviceResources->GetOutputSize();
 
+	//* 乱数のランダム化
+	srand((unsigned int)time(NULL));
 
-	//* カメラの初期化-----------------------------------------------------------	
-	// デバッグカメラ作成
-	//m_debugCamera = std::make_unique<DebugCamera>(windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
-
+	//* カメラの初期化-----------------------------------------------------------
 	m_camera = std::make_unique<Camera>(windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
 	//* -------------------------------------------------------------------------
 
 	{ // Obj3D初期化
 		// 設定
 		Obj3D::CommonDef def;
-		//def.pCamera = m_debugCamera.get();
 		def.pCamera = m_camera.get();
 		def.pDevice = deviceResources->GetD3DDevice();
 		def.pDeviceContext = deviceResources->GetD3DDeviceContext();
@@ -50,16 +49,8 @@ void Game::Initialize()
 	m_ObjSkydome = std::make_unique<Obj3D>();
 	m_ObjSkydome->LoadModel(L"skydome");
 
-	//m_ObjTest = std::make_unique<Obj3D>();
-	//m_ObjTest->LoadModel(L"SphereNode");
-	//m_ObjSkydome->AddChild(m_ObjTest.get());
-
-
 	//* プレイヤの初期化 ---------------------------------------------------
-
-	//* ボール読み込み
-	m_player = std::make_unique<Player>();
-
+	m_player = std::make_unique<Player>(1);
 	//* --------------------------------------------------------------------
 
 	//* 壁の初期化 ---------------------------------------------------
@@ -91,13 +82,31 @@ void Game::Initialize()
 	m_roofWall[1] = std::make_unique<Obstacle>();
 	m_roofWall[1]->SetTrans(Vector3(0.0f, 4.4f, -100));
 	m_roofWall[1]->SetScale(Vector3(20.0f, 1.0f, 20.0f));
-	//* yukの読み込み
+	//* 床の読み込み
 	m_floorWall[0] = std::make_unique<Obstacle>();
 	m_floorWall[0]->SetTrans(Vector3(0.0f, -5.4f, 0.0f));
 	m_floorWall[0]->SetScale(Vector3(20.0f, 1.0f, 20.0f));
 	m_floorWall[1] = std::make_unique<Obstacle>();
 	m_floorWall[1]->SetTrans(Vector3(0.0f, -5.4f, -100.0f));
 	m_floorWall[1]->SetScale(Vector3(20.0f, 1.0f, 20.0f));
+
+	//* --------------------------------------------------------------------
+
+	//* 障害物の初期化 ---------------------------------------------------
+
+	//* 最初は0が最初で、奥に進むに連れて1,2,3となっていく
+	m_whichObstacle = 0;
+	//* どれくらい進んだら次の障害物が作られるか
+	m_obstacleInterval = -20.0f;
+
+	//* 障害物読み込み
+	for (int i = 0; i < 8; i++)
+	{
+		m_obstacle[i] = std::make_unique<Player>(0);
+		m_obstacle[i]->SetScale(Vector3(1.5f, 1.5f, 1.5f));
+		m_obstacle[i]->SetTrans(Vector3(rand() % 8-4, rand() % 4-2, -15 + (m_obstacleInterval * i)));
+	}
+
 
 	//* --------------------------------------------------------------------
 
@@ -124,48 +133,65 @@ void Game::Update(StepTimer const& timer)
 	//* キーボード情報を毎フレーム更新する
 	KeyboardUtil::GetInstance()->Update();
 
+	//* カメラの更新処理 -----------------------------------------------------------
+	m_camera->Update();
+	//* ----------------------------------------------------------------------------
+
+
+	//* プレイヤの更新処理 ---------------------------------------------------------
+
 	//* 進んだ記録を左上に表示
 	int distance = m_player->GetTrans().z;
 	m_DebugText->AddText(Vector2(0, 0), L"Record:%dm", -distance);
 
+	//* ゲームオーバーでないなら前進し続ける
+	if (!m_player->isEnded())
+	{
+		m_player->Move();
+	}
+
 	//* 壁のコリジョン判定を考える時間がなさそうなので、領域で判定
+	//* 領域の外に出たらゲームオーバー
 	if (m_player->GetTrans().x < 6.0f && 
 		m_player->GetTrans().x > -6.0f &&
 		m_player->GetTrans().y < 3.5f &&
 		m_player->GetTrans().y > -3.5f)
 	{//* 領域の外に出ていないならば
 		//* プレイヤの更新処理
-		m_player->Move();
-		//* カメラの更新処理
-		m_camera->Update();
+		m_player->Update();
+		m_player->UpdateCollision();
+		//* 障害物の更新処理
+		for (int i = 0; i < 8; i++)
+		{
+			m_obstacle[i]->Update();
+			m_obstacle[i]->UpdateCollision();
+		}
 	}
 	else
 	{
 		// ゲームオーバーになったら記録とタイトルへ促す文章を表示
-		m_DebugText->AddText(Vector2(0, 50), L"Your record is %d m!\nPress SPACE to title.", -distance);
+		m_player->Finalization();
+		m_DebugText->AddText(Vector2(0, 50), L"Your record is %d m!", -distance);
 	}
 
-	m_player->Update();
-	m_player->UpdateCollision();
 
-	////* プレイヤの更新処理
-	//m_player->Move();
+	// プレイヤと障害物の、当たり判定の球を受け取る
+	const Sphere& playerSphere = m_player->GetCollision();
+	for (int i = 0; i < 8; i++)
+	{
+		const Sphere& obstacleSphere = m_obstacle[i]->GetCollision();
 
-	//if (m_player->GetTrans().x > 5)
-	//{
-	//	m_player->Finalization();
-	//}
-
-	//m_player->Update();
-	//m_player->UpdateCollision();
-
-
-
-
-	//m_debugCamera->Update();
+		//* 障害物に触れてもゲームオーバー
+		if (CheckSphere2Sphere(obstacleSphere, playerSphere))
+		{
+			m_player->Finalization();
+			m_DebugText->AddText(Vector2(0, 50), L"Your record is %d m!", -distance);
+		}
+	}
+	//* ----------------------------------------------------------------------------
 
 
-	//* 壁の更新
+	//* 壁の更新 -------------------------------------------------------------------
 	//* プレイヤが一定距離進んだら、手前の壁が奥に移動して次の壁になる
 	if (distance <= m_wallInterval)
 	{
@@ -176,16 +202,22 @@ void Game::Update(StepTimer const& timer)
 		m_floorWall[m_whichWall]->SetTrans(Vector3(0.0f, -5.4f, m_wallInterval));
 		m_whichWall = !m_whichWall;
 	}
+	//* ----------------------------------------------------------------------------
 
+	//* 障害物の更新 ---------------------------------------------------------------
+	//* プレイヤが一定距離進んだら、一番手前の障害物が奥に移動して次の障害物になる
+	if (distance <= m_obstacleInterval)
+	{
+		m_obstacleInterval -= 20.f;
+		m_obstacle[m_whichObstacle]->SetTrans(Vector3(rand() % 8-4, rand() % 4-2, -135 + m_obstacleInterval));
+		m_whichObstacle++;
 
-	
-
-
-
-	//if (MouseUtil::GetInstance()->IsTriggered(MyLibrary::MouseUtil::Button::Left))
-	//{
-	//	ADX2Le::GetInstance()->Play(5);
-	//}
+		if (m_whichObstacle == 8)
+		{
+			m_whichObstacle = 0;
+		}
+	}
+	//* ----------------------------------------------------------------------------
 }
 #pragma endregion
 
@@ -201,6 +233,13 @@ void Game::Render()
 	m_player->Draw();
 	m_player->DrawCollision();
 
+	//* 障害物の描画
+	for (int i = 0; i < 8; i++)
+	{
+		m_obstacle[i]->Draw();
+		m_obstacle[i]->DrawCollision();
+	}
+
 	//* 壁の描画
 	m_leftWall[0]->Draw();
 	m_leftWall[1]->Draw();
@@ -213,6 +252,7 @@ void Game::Render()
 }
 
 
-void Game::EndGame()
+bool Game::StopGame()
 {
+	return false;
 }
