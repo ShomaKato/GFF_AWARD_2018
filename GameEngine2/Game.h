@@ -66,15 +66,18 @@ private:
 	//* カメラ
 	std::unique_ptr<MyLibrary::Camera> m_camera;
 
+	//* プレイヤがどれくらい進んだか
+	int m_distance;
+
 	//* どれくらい進んだら壁が新たに表示されるか
 	float m_wallInterval;
 
-	//* 壁の判定用変数
+	//* 壁の判定用フラグ
 	bool m_whichWall;
 
 	//* どれくらい進んだら障害物が新たに表示されるか
 	float m_obstacleInterval;
 
-	//* 障害物の判定用変数
+	//* 障害物の判定用フラグ
 	int m_whichObstacle;
 };

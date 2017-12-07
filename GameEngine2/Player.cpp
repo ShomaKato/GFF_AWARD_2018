@@ -33,7 +33,7 @@ using namespace DirectX::SimpleMath;
 ////! @–ß‚è’lF‘¶İ‚µ‚È‚¢
 ////----------------------------------------------------------------------
 Player::Player(bool isPlayer)
-	:m_isOver(0)
+	:m_isOver(false)
 {
 	// “–‚½‚è”»’è‚Ìİ’è
 	//m_collision = std::make_unique<SphereNode>();
